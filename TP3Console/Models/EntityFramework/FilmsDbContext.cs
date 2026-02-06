@@ -1,4 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.Extensions.Logging;
 using System;
 using System.Collections.Generic;
@@ -30,7 +31,14 @@ public partial class FilmsDbContext : DbContext
 #warning To protect potentially sensitive information in your connection string, you should move it out of source code. You can avoid scaffolding the connection string by using the Name= syntax to read it from configuration - see https://go.microsoft.com/fwlink/?linkid=2131148. For more guidance on storing connection strings, see https://go.microsoft.com/fwlink/?LinkId=723263.
         => optionsBuilder.UseLoggerFactory(MyLoggerFactory)
                             .EnableSensitiveDataLogging()
-                            .UseNpgsql("Server=localhost;port=5432;Database=FilmsDB; uid = postgres; password=postgres;");
+                            .UseNpgsql("Server=localhost;port=5432;Database=FilmsDB; uid = postgres; password=postgres;")
+                            .UseLazyLoadingProxies();
+
+    private ILazyLoader _lazyLoader;
+    public Categorie(ILazyLoader lazyLoader)
+    {
+        _lazyLoader = lazyLoader;
+    }
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
